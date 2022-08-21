@@ -1,12 +1,10 @@
-<?php get_header(); ?>
-<div class="container">
-<?php 
-															if ( have_posts() ) {
-																while ( have_posts() ) {
-																	the_post(); 
-																	the_content();
-																} 
-															}
-                                                            ?>
-                </div>
-<?php get_footer(); ?>
+<?php
+ $post = $wp_query->post;
+ if ( in_category('Tin tức sự kiện') ) {
+  include(TEMPLATEPATH . '/single-news-life.php');
+}if ( in_category('Đào tạo') ) {
+    include(TEMPLATEPATH . '/single-news-life.php');}
+ if(in_category('Công việc tuyển dụng') ){
+   include(TEMPLATEPATH . '/single-job.php');
+  }
+?>

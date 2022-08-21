@@ -799,5 +799,96 @@ function my_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'my_scripts' );
 
-// user classic editor 
+
+
+/* user classic editor  */
 add_filter('use_block_editor_for_post', '__return_false');
+
+
+
+// Giới hạn từ bài viết mô tả
+function teaser($limit) { $excerpt = explode(' ', get_the_excerpt(), $limit); if (count($excerpt)>=$limit) { array_pop($excerpt); $excerpt = implode(" ",$excerpt).'[...]'; } else { $excerpt = implode(" ",$excerpt); } $excerpt = preg_replace('`\[[^\]]*\]`','',$excerpt); return $excerpt.'...'; }
+
+
+
+function post_type_tuyen_dung(){
+    $label = array(
+        'name' => 'Tuyển dụng',
+        'singular_name' => 'Tuyển dụng'
+    );
+
+    $args = array(
+        'labels' => $label,
+        'description' => 'Post type Tuyển dụng',
+        'supports' => array(
+            'title',
+            'editor',
+            'author',
+            'thumbnail',
+        ),
+		
+        'taxonomies' => array( 'category', 'post_tag' ), 
+        'hierarchical' => false, 
+        'public' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_nav_menus' => true,
+        'show_in_admin_bar' => true,
+        'menu_icon' => 'dashicons-groups',
+        'can_export' => true, 
+        'has_archive' => false, 
+        'publicly_queryable' => true, 
+        'capability_type' => 'post' 
+    );
+    register_post_type('tuyen-dung', $args);
+}
+add_action('init', 'post_type_tuyen_dung');
+
+add_action('wp_ajax_nopriv_render_filter', 'render_filter');
+add_action('wp_ajax_render_filter', 'render_filter');
+
+function render_filter()
+{
+    $cat = (isset($_POST['cat'])) ? esc_attr($_POST['cat']) : '';
+    $htmls = '';
+    $args = array(
+        // 'category_name' => 'Công việc tuyển dụng',
+        'post_type' => 'tuyen-dung', //cái post type này tức là loại mà bạn muốn lấy ra, vd lấy ra bài viết là post, 
+        'posts_per_page' => 8, //post per page này là số lượng muốn lấy ra (-1 là không giới hạn, ở đây  lấy ra 5 bài )
+        'limit' => 8,
+        'order' => 'DESC',
+        'orderby' => 'menu_order',
+        'category_name' => $cat
+    );
+    $query = new WP_Query($args);
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            $htmls .= '
+				<div class="col-lg-4 mb15">
+					<a href="' . get_the_permalink() . '">
+						<div class="position-relative">
+
+							<img src="' . get_the_post_thumbnail_url() . '" alt="" class="w-100">
+
+							<button class="btn-job d-flex align-items-center position-absolute">
+
+								<img src="/wp-content/themes/twentytwenty/assets/images/recruitment/icon-gioi-thieu.png" alt="" class="img-btnjob">
+
+								<div class="job-name">' . get_the_category()[0]->name . '</div>
+
+							</button>
+
+						</div>
+
+						<p>' . get_the_title() . '</p>
+					</a>
+				</div>
+			';
+        endwhile;
+    endif;
+    wp_reset_postdata();
+
+    echo $htmls;
+
+    die();
+}
