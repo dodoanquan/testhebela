@@ -45,7 +45,12 @@ get_header()
 				<!-- <input  id="key_search" type="text" placeholder="Tìm kiếm công việc tại Hebela?" class="desc">
 
 				<button onclick="search()"><img src="<?php // echo get_template_directory_uri(); ?>/assets/images/recruitment/search.png" alt="" class="w-100"></button> -->
-<?php get_search_form() ?>
+				<div class ="timkiem-right">
+	<form action="<?php echo get_home_url(); ?>/" method="get">
+		<input type="text" id="s" name="s" class="form-control" value="" placeholder="Bạn muốn tìm gì?">
+		<button type="submit" class ="tim-tintuc">Tìm ngay</button>
+	</form>
+</div>
 			</div>
 
 		</div>
@@ -65,7 +70,7 @@ get_header()
 
 		<div class="row">
 
-			<div class="col-lg-3 none-mb">
+			<div class="col-lg-3 ">
 
 				<div class="option-job">
 <div id="reset-filter">
@@ -122,10 +127,9 @@ get_header()
 				$args = array(
 					// 'category_name' => 'Công việc tuyển dụng',
 					'post_type' => 'tuyen-dung', //cái post type này tức là loại mà bạn muốn lấy ra, vd lấy ra bài viết là post, 
-					'posts_per_page' => 8, //post per page này là số lượng muốn lấy ra (-1 là không giới hạn, ở đây  lấy ra 5 bài )
-					'limit' => 8,
+					'posts_per_page' => -1, //post per page này là số lượng muốn lấy ra (-1 là không giới hạn, ở đây  lấy ra 5 bài )
 					'order' => 'DESC',
-					'orderby' => 'menu_order',
+					'orderby' => 'title',
 				);
 				$query = new WP_Query($args);
 				if ($query->have_posts()) :

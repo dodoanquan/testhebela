@@ -8439,3 +8439,27 @@ body:not(.overlay-header).single-post .primary-menu>li>a
 .pb10{
 	padding-bottom: 10px;
 }
+
+input#s {
+    width: 83%;
+    height: auto;
+    margin: 10px 0px;
+}
+
+@media screen and (max-width: 950px)
+{
+	input#s {
+    width: 71%;
+    height: auto;
+    margin: 10px 0px;
+}
+}
+
+
+button.tim-tintuc {
+    background: #4285f4;
+    color: #fff;
+    font-size: 16px;
+    padding: 6px 20px;
+    font-weight: bold;
+}
